@@ -10,55 +10,53 @@ session = start_session(engine)
 app = Flask(__name__)
 
 
-# Mocks: Fake Restaurants
-restaurant = {'name': 'The CRUDdy Crab', 'id': '1'}
-
-restaurants = [{'name': 'The CRUDdy Crab', 'id': '1'}, {'name':'Blue Burgers', 'id':'2'},{'name':'Taco Hut', 'id':'3'}]
-
-
-#Fake Menu Items
-items = [ {'name':'Cheese Pizza', 'description':'made with fresh cheese', 'price':'$5.99','course' :'Entree', 'id':'1'}, {'name':'Chocolate Cake','description':'made with Dutch Chocolate', 'price':'$3.99', 'course':'Dessert','id':'2'},{'name':'Caesar Salad', 'description':'with fresh organic vegetables','price':'$5.99', 'course':'Entree','id':'3'},{'name':'Iced Tea', 'description':'with lemon','price':'$.99', 'course':'Beverage','id':'4'},{'name':'Spinach Dip', 'description':'creamy dip with fresh spinach','price':'$1.99', 'course':'Appetizer','id':'5'} ]
-item =  {'name':'Cheese Pizza','description':'made with fresh cheese','price':'$5.99','course' :'Entree'}
-
 @app.route('/')
 @app.route('/restaurants')
 def start():
+    restaurants = session.query(Restaurant).all()
     return render_template('restaurants.html', restaurants=restaurants)
 
 
 @app.route('/restaurants/<int:restaurant_id>/edit/', methods=['GET', 'POST'])
 def edit_restaurant(restaurant_id):
-    return ' this is view 2 '
+    restaurant = session.query(Restaurant).filter_by(id=int(restaurant_id)).one()
+    return render_template('editrestaurant.html', restaurant=restaurant)
 
 
 @app.route('/restaurants/new/', methods=['GET', 'POST'])
 def new_restaurant():
-    return ' this is view 3 '
+    return render_template('newrestaurant.html')
 
 
 @app.route('/restaurants/<int:restaurant_id>/remove/', methods=['GET', 'POST'])
-def remove_restaurant(restaurant_id):
-    return ' this is view 4 '
+def delete_restaurant(restaurant_id):
+    restaurant = session.query(Restaurant).filter_by(id=int(restaurant_id)).one()
+    return render_template('deleterestaurant.html', restaurant=restaurant)
 
 
 @app.route('/restaurants/<int:restaurant_id>/', methods=['GET', 'POST'])
 def list_items(restaurant_id):
-    return ' this is view 5 '
+    restaurant = session.query(Restaurant).filter_by(id=int(restaurant_id)).one()
+    items = session.query(MenuItem).filter_by(restaurant_id=restaurant.id)
+    return render_template('menu.html', restaurant=restaurant, items=items)
 
 
-@app.route('/restaurants/<int:restaurant_id>/edit/', methods=['GET', 'POST'])
-def edit_item(restaurant_id):
-    return ' this is view 6 '
+@app.route('/restaurants/<int:restaurant_id>/edit/<int:item_id>/', methods=['GET', 'POST'])
+def edit_item(restaurant_id, item_id):
+    item = session.query(MenuItem).filter_by(id=int(item_id)).one()
+    return render_template('editmenuitem.html', item=item)
 
 
 @app.route('/restaurants/<int:restaurant_id>/new/', methods=['GET', 'POST'])
 def new_item(restaurant_id):
-    return ' this is view 7 '
+    restaurant = session.query(Restaurant).filter_by(id=int(restaurant_id)).one()
+    return render_template('newmenuitem.html', restaurant=restaurant)
 
 
-@app.route('/restaurants/<int:restaurant_id>/remove/', methods=['GET', 'POST'])
-def remove_item(restaurant_id):
-    return ' this is view 8 '
+@app.route('/restaurants/<int:restaurant_id>/remove/<int:item_id>/', methods=['GET', 'POST'])
+def delete_item(restaurant_id, item_id):
+    item = session.query(MenuItem).filter_by(id=int(item_id)).one()
+    return render_template('deletemenuitem.html', item=item)
 
 
 if __name__ == '__main__':
