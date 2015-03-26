@@ -7,7 +7,10 @@ The web-server is in `finalproject.py`.
 
 ### Running the app:
 
-Git clone this repository.
+Git clone this repository:
+```
+$ git clone https://github.com/Mec-iS/nanodegree-fullstack-final
+```
 
 Install the necessary python libraries:
 ```
@@ -15,9 +18,13 @@ $ cd nanodegree-fullstack-final
 $ pip install -r requirements.txt
 ```
 
-Set up the database by running the script in `tests/lotofmenus.py`:
-`$ python tests/lotofmenus.py`
+If you need something to start with, set up the test database by running the script in `tests/lotofmenus.py`:
+```
+$ python tests/lotofmenus.py
+```
 
 Run the server:
-`$ python finalproject.py`
+```
+$ python finalproject.py
+```
 

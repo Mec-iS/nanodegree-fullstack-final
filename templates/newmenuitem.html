@@ -2,19 +2,74 @@
 
 
 {% block body %}
-
-    <h1> New Menu Item </h1>
-    <h2> For Restaurant: {{restaurant.name}}</h2>
-
-        <form action="{{url_for('new_item', restaurant_id=restaurant.id )}}" method = 'POST'>
-
-            <p>Name:</p>
-
-            <input type='text' size='30' name='name' placeholder="Enter menu item name">
-
-            <input type='submit' value='Create'>
-
+<div class="row">
+    <h2>Create a New Menu Item for {{ restaurant.name }}</h2>
+</div>
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-4">
+        <form  class="form-horizontal" action="{{ url_for('new_item', restaurant_id=restaurant.id) }}" method = 'POST'>
+            <div class="form-group">
+                <label for="name" class="col-sm-2 control-label">Name</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="name" name="name" placeholder="Enter a name">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="description" class="col-sm-4 control-label" style="text-align: left;">Description</label>
+                <div class="col-sm-8">
+                    <textarea class="form-control" id="description" name="description" placeholder="Enter a description"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="price" class="col-sm-2 control-label">Price</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" id="price" name="price" placeholder="Enter a price">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="radio">
+                    <label><input type="radio" name="course">Appetizer</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="radio">
+                    <label><input type="radio" name="course">Beverage</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="radio">
+                    <label><input type="radio" name="course">Entr&egrave;e</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="radio">
+                    <label><input type="radio" name="course">Main Dish</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="radio">
+                    <label><input type="radio" name="course">Single Dish</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="radio">
+                    <label><input type="radio" name="course">Side Dish</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="radio">
+                    <label><input type="radio" name="course">Dessert</label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <button type="submit" class="btn btn-default">Insert Item</button>
+                </div>
+            </div>
+            <p><a href="{{ url_for('list_items', restaurant_id=restaurant.id) }}">Cancel</a></p>
         </form>
-
+    </div>
+</div>
 
 {% endblock %}

@@ -2,19 +2,65 @@
 
 
 {% block body %}
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-11">
+            <h1>Restaurants</h1>
+        </div>
+    </div>
 
-    <p><a href="{{ url_for('new_restaurant') }}">Add a Restaurant</a></p>
+     <!-- Flash messages -->
+   {% with messages = get_flashed_messages() %}
+    {% if messages %}
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-5">
+            <div class="form-group has-success has-feedback">
+            {% for message in messages %}
+                <label class="control-label" for="inputSuccess2">{{ message }}
+                    <span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                </label>
+
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% endif %}
+   {% endwith %}
+
+    <div class="row">
+        <div class="col-md-1">
+            <p xmlns="http://www.w3.org/1999/html"><a href="{{ url_for('new_restaurant') }}">Add a Restaurant</a></p>
+        </div>
+    </div>
 
         {% for r in restaurants %}
-
-            <div>
-                <p>{{r.name}} <a href="{{ url_for('list_items', restaurant_id=r.id) }}"> >>> </a><br/>
-                    <a href="{{ url_for('edit_restaurant', restaurant_id=r.id) }}">Edit</a><br/>
-                    <a href="{{ url_for('delete_restaurant', restaurant_id=r.id) }}">Delete</a>
-                </p>
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4 restaurant">
+                    <h3>{{r.name}}</h3>
+                </div>
+                <div class="col-md-1">
+                    <h3><a href="{{ url_for('list_items', restaurant_id=r.id) }}">Menu</a></h3>
+                </div>
+                <div class="col-md-1 ops">
+                    <p><a href="{{ url_for('edit_restaurant', restaurant_id=r.id) }}">Edit</a></p>
+                </div>
+                <div class="col-md-1 ops">
+                    <p><a href="{{ url_for('delete_restaurant', restaurant_id=r.id) }}">Delete</a></p>
+                </div>
             </div>
 
 
         {% endfor %}
+
+    <style>
+        .restaurant {
+            border-bottom: 1px dotted #FFFFFF;
+        }
+        .ops {
+            padding-top: 1.5em;
+        }
+    </style>
 
 {% endblock %}
