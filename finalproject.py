@@ -1,4 +1,5 @@
-from flask import Flask, Response, render_template, request, url_for, redirect, flash, jsonify, g, session
+from random import random
+from flask import Flask, render_template, request, url_for, redirect, flash, jsonify, g, session, abort
 from sqlalchemy.orm.exc import NoResultFound
 from flask.ext.github import GitHub
 
@@ -13,6 +14,16 @@ from libs.secret import secret_key, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET
 app = Flask(__name__)
 app.config['GITHUB_CLIENT_ID'] = GITHUB_CLIENT_ID
 app.config['GITHUB_CLIENT_SECRET'] = GITHUB_CLIENT_SECRET
+
+
+# CSRF token
+def generate_csrf_token():
+    if '_csrf_token' not in session:
+        rand = str(random())
+        session['_csrf_token'] = rand
+    return session['_csrf_token']
+
+app.jinja_env.globals['csrf_token'] = generate_csrf_token
 
 # set up github-flask
 github = GitHub(app)
@@ -31,7 +42,6 @@ def start():
     """
     Display all the restaurants
     """
-    print g.user
     if g.user:
         restaurants = db_session.query(Restaurant).all()
         return render_template('restaurants.html', restaurants=restaurants, user=g.user)
@@ -46,7 +56,7 @@ def new_restaurant():
     """
     if g.user:
         if request.method == 'GET':
-            return render_template('newrestaurant.html')
+            return render_template('newrestaurant.html', user=g.user)
         elif request.method == 'POST':
             print request.form['name']
             new_restaurant = Restaurant(name=request.form['name'])
@@ -69,7 +79,7 @@ def edit_restaurant(restaurant_id):
     if g.user:
         if request.method == 'GET':
             restaurant = db_session.query(Restaurant).filter_by(id=int(restaurant_id)).one()
-            return render_template('editrestaurant.html', restaurant=restaurant)
+            return render_template('editrestaurant.html', restaurant=restaurant, user=g.user)
         elif request.method == 'POST':
             restaurant = db_session.query(Restaurant).filter_by(id=int(restaurant_id)).one()
             restaurant.name = request.form['name']
@@ -92,7 +102,7 @@ def delete_restaurant(restaurant_id):
     if g.user:
         if request.method == 'GET':
             restaurant = db_session.query(Restaurant).filter_by(id=int(restaurant_id)).one()
-            return render_template('deleterestaurant.html', restaurant=restaurant)
+            return render_template('deleterestaurant.html', restaurant=restaurant, user=g.user)
         elif request.method == 'POST':
             restaurant = db_session.query(Restaurant).filter_by(id=int(restaurant_id)).one()
             items = db_session.query(MenuItem).filter_by(restaurant_id=int(restaurant_id)).all()
@@ -115,7 +125,7 @@ def list_items(restaurant_id):
     if g.user:
         restaurant = db_session.query(Restaurant).filter_by(id=int(restaurant_id)).one()
         items = db_session.query(MenuItem).filter_by(restaurant_id=restaurant.id)
-        return render_template('menu.html', restaurant=restaurant, items=items)
+        return render_template('menu.html', restaurant=restaurant, items=items, user=g.user)
 
     return error_401()
 
@@ -130,7 +140,7 @@ def edit_item(restaurant_id, item_id):
     if g.user:
         if request.method == 'GET':
             item = db_session.query(MenuItem).filter_by(id=int(item_id)).one()
-            return render_template('editmenuitem.html', item=item)
+            return render_template('editmenuitem.html', item=item, user=g.user)
         elif request.method == 'POST':
             item = db_session.query(MenuItem).filter_by(id=int(item_id)).one()
             item.name = request.form['name']
@@ -155,7 +165,7 @@ def new_item(restaurant_id):
     if g.user:
         if request.method == 'GET':
             restaurant = db_session.query(Restaurant).filter_by(id=int(restaurant_id)).one()
-            return render_template('newmenuitem.html', restaurant=restaurant)
+            return render_template('newmenuitem.html', restaurant=restaurant, user=g.user)
         elif request.method == 'POST':
             restaurant = db_session.query(Restaurant).filter_by(id=int(restaurant_id)).one()
             new_item = MenuItem(name=request.form['name'],
@@ -182,7 +192,7 @@ def delete_item(restaurant_id, item_id):
     if g.user:
         if request.method == 'GET':
             item = db_session.query(MenuItem).filter_by(id=int(item_id)).one()
-            return render_template('deletemenuitem.html', item=item)
+            return render_template('deletemenuitem.html', item=item, user=g.user)
         elif request.method == 'POST':
             item = db_session.query(MenuItem).filter_by(id=int(item_id)).one()
             db_session.delete(item)
@@ -253,6 +263,10 @@ def before_request():
     g.user = None
     if 'user_id' in session:
         g.user = db_session.query(User).get(session['user_id'])
+    if request.method == "POST":
+        token = session.pop('_csrf_token', None)
+        if not token or token != request.form.get('_csrf_token'):
+            return error_401()
 
 
 @app.after_request

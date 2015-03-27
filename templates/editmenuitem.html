@@ -37,6 +37,8 @@
                 </div>
             </div>
 
+            <input name="_csrf_token" type="hidden" value="{{ csrf_token() }}">
+
         <p><a href="{{url_for('list_items', restaurant_id=item.restaurant.id)}}">Cancel</a></p>
         </form>
     </div>
