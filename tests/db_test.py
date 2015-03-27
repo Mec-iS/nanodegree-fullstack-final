@@ -1,5 +1,3 @@
-__author__ = 'lorenzo'
-
 
 from sqlalchemy.orm import sessionmaker, Query
 from libs.database_setup import engine, Base, Restaurant, MenuItem

@@ -8,6 +8,21 @@
 </head>
 <body>
    <div class="container">
+   <div class="row">
+       <div class="col-md-10"></div>
+       {% if user %}
+       <div class="col-md-1">
+           <a href="{{ url_for("user") }}">Get user</a>
+       </div>
+       <div class="col-md-1">
+           <a href="{{ url_for("logout") }}">Logout</a>
+       </div>
+       {% else %}
+      <div class="col-md-1">
+           <a href="{{ url_for("login") }}">Login</a>
+       </div>
+       {% endif %}
+   </div>
    {%  block body %}
    {% endblock %}
    </div>

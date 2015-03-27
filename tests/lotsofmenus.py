@@ -3,25 +3,11 @@
 #
 
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
- 
-from libs.database_setup import Restaurant, Base, MenuItem
-from libs.dbSession import create_sqlite_file, start_session
+
+from libs.database_setup import Restaurant, User, MenuItem, engine, start_session, create_sqlite_file
 
 
-# Start engine and create the local file to store the database
-engine = create_engine(
-    r'sqlite:///C:\Github\restaurantmenu.db'
-)
 
-# Create a file to store the data
-create_sqlite_file(engine)
-
-# Bind the engine to the metadata of the Base class so that the
-# declaratives can be accessed through a DBSession instance
-#Base.metadata.bind = engine
- 
-#DBSession = sessionmaker(bind=engine)
 # A DBSession() instance establishes all conversations with the database
 # and represents a "staging zone" for all the objects loaded into the
 # database session object. Any change made against the objects in the
@@ -30,11 +16,12 @@ create_sqlite_file(engine)
 # revert all of them back to the last commit by calling
 # session.rollback()
 #session = DBSession()
+create_sqlite_file(engine)
 session = start_session(engine)
 
 
 
-#Menu for UrbanBurger
+# Menu for UrbanBurger
 restaurant1 = Restaurant(name = "Urban Burger")
 
 session.add(restaurant1)

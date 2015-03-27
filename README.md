@@ -1,8 +1,8 @@
 # nanodegree-fullstack-final
 ### Project 3: Full-Stack Foundations Final
-Designing and implementing a web-application to C.R.U.D. with a database, using `MySql Lite` and `Python2.7`. 
+Designing and implementing a web-application to C.R.U.D. with a database, using `MySql Lite` and `Python2.7`.
+There are also endpoints for serving JSON as REST services.
 
-The web-server is in `finalproject.py`.
 
 
 ### Running the app:
@@ -18,15 +18,19 @@ $ cd nanodegree-fullstack-final
 $ pip install -r requirements.txt
 ```
 
-If you need something to start with, set up the test database by running the script in `tests/lotofmenus.py`:
+Change directory to repository directory.
+
+If you need something to start with, set up the test database by running the script in `tests\lotofmenus.py`:
 ```
-$ python tests/lotofmenus.py
+$ python tests\lotsofmenus.py
 ```
+
+Add your GitHub OAUTH tokens in `libs\secret.py`.
 
 Run the server:
 ```
 $ python finalproject.py
 ```
 
-Visit `127.0.0.1:5000` on your broser.
+Visit `127.0.0.1:5000` on your browser.
 
