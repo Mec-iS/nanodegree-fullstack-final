@@ -85,10 +85,13 @@ def start_session(eng):
 
 import os
 import os.path
+# get the SQLlite file
 current = os.getcwd()
 path = os.path.join(current, 'restaurantmenu.db')
 string = r'sqlite:///' + path
-# Start engine and create the local file to store the database
+# print string
+
+# Start engine
 engine = create_engine(
     string
 )

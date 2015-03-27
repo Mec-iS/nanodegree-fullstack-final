@@ -6,21 +6,30 @@ from libs.database_setup import Restaurant, MenuItem, User
 from libs.database_setup import engine, start_session
 from libs.secret import secret_key, GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET
 
-db_session = start_session(engine)
+#
+# This is a Flask Web-App
+#
 
 app = Flask(__name__)
 app.config['GITHUB_CLIENT_ID'] = GITHUB_CLIENT_ID
 app.config['GITHUB_CLIENT_SECRET'] = GITHUB_CLIENT_SECRET
 
-# setup github-flask
+# set up github-flask
 github = GitHub(app)
+
+# database session
+db_session = start_session(engine)
+
+#
+# Basic Routes
+#
 
 
 @app.route('/')
 @app.route('/restaurants/')
 def start():
     """
-    Diplay all the restaurants
+    Display all the restaurants
     """
     print g.user
     if g.user:
@@ -86,6 +95,9 @@ def delete_restaurant(restaurant_id):
             return render_template('deleterestaurant.html', restaurant=restaurant)
         elif request.method == 'POST':
             restaurant = db_session.query(Restaurant).filter_by(id=int(restaurant_id)).one()
+            items = db_session.query(MenuItem).filter_by(restaurant_id=int(restaurant_id)).all()
+            for i in items:
+                db_session.delete(i)
             db_session.delete(restaurant)
             db_session.commit()
             flash("restaurant %s deleted!" % restaurant.name)
@@ -139,7 +151,6 @@ def new_item(restaurant_id):
     """
     Add a new MenuItem to a Restaurant menu
     :param restaurant_id:
-    :return:
     """
     if g.user:
         if request.method == 'GET':
@@ -182,6 +193,11 @@ def delete_item(restaurant_id, item_id):
         return 404
 
     return error_401()
+
+
+#
+# API Routes
+#
 
 
 @app.route('/api/restaurants/', methods=['GET'])

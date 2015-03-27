@@ -1,11 +1,8 @@
+from libs.database_setup import Restaurant, MenuItem, engine, start_session, create_sqlite_file
+
 #
 # Script to populate database
 #
-
-from sqlalchemy import create_engine
-
-from libs.database_setup import Restaurant, User, MenuItem, engine, start_session, create_sqlite_file
-
 
 
 # A DBSession() instance establishes all conversations with the database
@@ -223,7 +220,7 @@ session.commit()
 
 
 
-#Menu for Andala's 
+#Menu for Andala's
 restaurant1 = Restaurant(name = "Andala\'s")
 
 session.add(restaurant1)
