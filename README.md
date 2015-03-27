@@ -16,14 +16,14 @@ Install the necessary python libraries:
 $ pip install -r requirements.txt
 ```
 
-Change directory to repository directory.
-
-To create the database and tables, and load some mock data, run the `lotofmenus.py` script in `tests`. 
-A file named `restaurantmenu.db` get created in the repository's directory.
-
 Add your GitHub OAUTH tokens in `libs\secret.py`.
 
-Run the server by running the `finalproject.py` script :
+Change directory to repository directory and:.
+
+* Run the `lotofmenus.py` script in `tests`, to create the database and tables, and load some mock data. 
+A file named `restaurantmenu.db` get created in the repository's directory.
+
+* Run the server by running the `finalproject.py` script
 
 Visit `127.0.0.1:5000` on your browser.
 
