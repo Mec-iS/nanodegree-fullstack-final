@@ -184,7 +184,7 @@ def delete_item(restaurant_id, item_id):
     return error_401()
 
 
-@app.route('/restaurants/JSON/', methods=['GET'])
+@app.route('/api/restaurants/', methods=['GET'])
 def api_restaurants():
     """
     Returns a JSON containing all the restaurants
@@ -194,7 +194,7 @@ def api_restaurants():
     return jsonify({"Restaurants": [r.serialize for r in restaurants]})
 
 
-@app.route('/restaurants/<int:restaurant_id>/menu/JSON/', methods=['GET'])
+@app.route('/api/restaurants/<int:restaurant_id>/menu/', methods=['GET'])
 def api_restaurant_menu(restaurant_id):
     """
     Returns a JSON containing all menu items of a Restaurant
@@ -208,7 +208,7 @@ def api_restaurant_menu(restaurant_id):
     return jsonify({"MenuItems": [i.serialize for i in items]})
 
 
-@app.route('/restaurants/<int:restaurant_id>/menu/<int:item_id>/JSON/', methods=['GET'])
+@app.route('/api/restaurants/<int:restaurant_id>/menu/item/<int:item_id>/', methods=['GET'])
 def api_single_item(restaurant_id, item_id):
     """
     Returns a JSON containing the details of a single MenuItem
@@ -229,6 +229,7 @@ def api_single_item(restaurant_id, item_id):
 
 #
 # Authentication & Authorization Routes
+# https://github.com/cenkalti/github-flask/blob/master/example.py
 #
 
 @app.before_request
@@ -294,6 +295,7 @@ def user():
 
 #
 # Custom Auth Error
+# http://stackoverflow.com/questions/7877230/standard-401-response-when-using-http-auth-in-flask
 #
 
 

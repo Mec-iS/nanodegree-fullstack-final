@@ -1,3 +1,4 @@
+import os
 from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship
@@ -82,9 +83,14 @@ def start_session(eng):
     session = DBSession()
     return session
 
+import os
+import os.path
+current = os.getcwd()
+path = os.path.join(current, 'restaurantmenu.db')
+string = r'sqlite:///' + path
 # Start engine and create the local file to store the database
 engine = create_engine(
-    r'sqlite:///C:\Github\restaurantmenu.db'
+    string
 )
 
 

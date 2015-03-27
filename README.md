@@ -1,8 +1,7 @@
 # nanodegree-fullstack-final
 ### Project 3: Full-Stack Foundations Final
 Designing and implementing a web-application to C.R.U.D. with a database, using `MySql Lite` and `Python2.7`.
-There are also endpoints for serving JSON as REST services.
-
+There are also endpoints for serving data as REST service.
 
 
 ### Running the app:
